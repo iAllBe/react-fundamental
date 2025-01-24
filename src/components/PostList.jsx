@@ -10,6 +10,7 @@ const PostList = ({posts}) => {
                     key={post.id}
                     title={post.title}
                     body={post.body}
+                    id={post.id}
                 />
             ))}
         </div>

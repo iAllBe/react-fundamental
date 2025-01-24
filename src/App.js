@@ -1,5 +1,6 @@
 import {useState} from "react";
 import PostList from "./components/PostList";
+import classes from "./styles/App.module.css";
 
 function App() {
     const [posts, usePosts] = useState([
@@ -9,7 +10,7 @@ function App() {
     ]);
 
   return (
-    <div className="App">
+    <div className={classes.App}>
       <PostList
         posts={posts}
       />
