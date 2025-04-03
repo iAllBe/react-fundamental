@@ -1,19 +1,13 @@
 import React, {useState} from 'react';
 import Counter from "./components/Counter";
+import './styles/App.css'
+import PostItem from "./components/PostItem";
 
 function App() {
-    const [value, setValue] = useState('Текст в инпуте')
 
   return (
       <div className="App">
-          <Counter/>
-
-          <h2>{value}</h2>
-          <input
-              type="text"
-              value={value}
-              onChange={e => setValue(e.target.value)}
-          />
+          <PostItem post={{id: 1, title: 'JS', body: 'Desc'}}/>
       </div>
   );
 }
