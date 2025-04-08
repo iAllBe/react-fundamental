@@ -5,22 +5,34 @@ import MyButton from "./components/UI/button/MyButton";
 import MyInput from "./components/UI/input/MyInput";
 
 function App() {
-    const [posts, usePosts] = useState([
+    const [posts, setPosts] = useState([
         {id: 1, title: 'JS 1', body: 'Desc 1'},
         {id: 2, title: 'JS 2', body: 'Desc 2'},
         {id: 3, title: 'JS 3', body: 'Desc 3'},
     ])
+
+    const [post, setPost] = useState({title: '', body: ''})
+
+    function addNewPost(e) {
+        e.preventDefault()
+        setPosts([...posts, {...post, id: Date.now()}])
+        setPost({title: '', body: ''})
+    }
 
   return (
       <div className="App">
           <form action="">
               <MyInput
                   type="text"
-                  value='Наименование поста'/>
+                  value={post.title}
+                  onChange={e => setPost({...post, title: e.target.value})}
+              />
               <MyInput
                   type="text"
-                  value='Описание поста'/>
-              <MyButton disabled>Создать пост</MyButton>
+                  value={post.body}
+                  onChange={e => setPost({...post, body: e.target.value})}
+              />
+              <MyButton onClick={addNewPost}>Создать пост</MyButton>
           </form>
           <PostList
               posts={posts}
