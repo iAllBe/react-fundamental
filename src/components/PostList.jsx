@@ -1,7 +1,7 @@
 import React from 'react';
 import PostItem from "./PostItem";
 
-const PostList = ({posts, title}) => {
+const PostList = ({posts, title, remove}) => {
     return (
         <div>
             <h1>{title}</h1>
@@ -9,7 +9,9 @@ const PostList = ({posts, title}) => {
                 <PostItem
                     post={post}
                     key={post.id}
-                    number={index + 1}/>
+                    number={index + 1}
+                    remove={remove}
+                />
             )}
         </div>
     );
