@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import './styles/App.css'
 import PostList from "./components/PostList";
-import MyButton from "./components/UI/button/MyButton";
-import MyInput from "./components/UI/input/MyInput";
 import PostForm from "./components/PostForm";
+import MySelect from "./components/UI/select/MySelect";
 
 function App() {
     const [posts, setPosts] = useState([
-        {id: 1, title: 'JS 1', body: 'Desc 1'},
-        {id: 2, title: 'JS 2', body: 'Desc 2'},
-        {id: 3, title: 'JS 3', body: 'Desc 3'},
+        {id: 1, title: 'AAA', body: 'CCC'},
+        {id: 2, title: 'CCC', body: 'BBB'},
+        {id: 3, title: 'BBB', body: 'AAA'},
     ])
 
     function createPost(newPost) {
@@ -20,9 +19,24 @@ function App() {
         setPosts(posts.filter(p => p.id !== post.id))
     }
 
+    function sortPosts(value) {
+        setPosts([...posts].sort((a, b) => a[value].localeCompare(b[value])))
+    }
+
   return (
       <div className="App">
           <PostForm create={createPost}/>
+          <div>
+              <hr style={{margin: '15px 0'}}/>
+              <MySelect
+                  defaultOption='Сортировка'
+                  options={[
+                      {value: 'title', name: 'По загаловку'},
+                      {value: 'body', name: 'По описанию'}
+                  ]}
+                  sortPosts={sortPosts}
+              />
+          </div>
           {posts.length
               ? <PostList
                   posts={posts}
