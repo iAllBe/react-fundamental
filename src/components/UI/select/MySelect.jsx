@@ -1,8 +1,11 @@
 import React from 'react';
 
-const MySelect = ({defaultOption, options, sortPosts}) => {
+const MySelect = ({defaultOption, options, value, onChange}) => {
     return (
-        <select onChange={(e) => sortPosts(e.target.value)}>
+        <select
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+        >
             <option
                 disabled
                 value=''

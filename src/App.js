@@ -3,6 +3,7 @@ import './styles/App.css'
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import MySelect from "./components/UI/select/MySelect";
+import MyInput from "./components/UI/input/MyInput";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -10,6 +11,10 @@ function App() {
         {id: 2, title: 'CCC', body: 'BBB'},
         {id: 3, title: 'BBB', body: 'AAA'},
     ])
+
+    const [selectedSort, setSelectedSort] = useState('')
+
+    const [searchQuery, setSearchQuery] = useState('')
 
     function createPost(newPost) {
         setPosts([...posts, newPost])
@@ -19,8 +24,9 @@ function App() {
         setPosts(posts.filter(p => p.id !== post.id))
     }
 
-    function sortPosts(value) {
-        setPosts([...posts].sort((a, b) => a[value].localeCompare(b[value])))
+    function sortPosts(sort) {
+        setSelectedSort(sort);
+        setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])))
     }
 
   return (
@@ -28,7 +34,14 @@ function App() {
           <PostForm create={createPost}/>
           <div>
               <hr style={{margin: '15px 0'}}/>
+              <MyInput
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder='Поиск'
+              />
               <MySelect
+                  value={selectedSort}
+                  onChange={sortPosts}
                   defaultOption='Сортировка'
                   options={[
                       {value: 'title', name: 'По загаловку'},
