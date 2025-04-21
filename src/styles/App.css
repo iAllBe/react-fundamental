@@ -21,3 +21,7 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.remove-btn {
+    margin-right: 0.5rem;
+}

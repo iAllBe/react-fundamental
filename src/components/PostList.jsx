@@ -13,9 +13,9 @@ const PostList = ({posts, title, remove}) => {
             {posts.map((post, index) =>
                 <PostItem
                     post={post}
-                    key={post.id}
                     number={index + 1}
                     remove={remove}
+                    key={post.id}
                 />
             )}
         </div>
