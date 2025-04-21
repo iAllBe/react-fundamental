@@ -12,7 +12,7 @@ const PostFilter = ({filter, setFilter}) => {
             />
             <MySelect
                 value={filter.sort}
-                onChange={selectedSort => setFilter({...filter, sort: selectedSort})} //WTF???
+                onChange={selectedSort => setFilter({...filter, sort: selectedSort})}
                 defaultOption='Сортировка'
                 options={[
                     {value: 'title', name: 'По загаловку'},
