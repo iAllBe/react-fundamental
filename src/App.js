@@ -1,19 +1,20 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './styles/App.css'
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
-import PostFilter from "./components/UI/PostFilter";
+import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/modal/MyModal";
 import MyButton from "./components/UI/button/MyButton";
 import {usePosts} from "./hooks/usePosts";
-import axios from "axios";
+import PostService from "./API/PostService";
+import Loader from "./components/UI/loader/Loader";
 
 function App() {
     const [posts, setPosts] = useState([])
-
     const [filter, setFilter] = useState({sort: '', query: ''})
     const [modal, setModal] = useState(false)
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
+    const [isPostingLoading, setIsPostingLoading] = useState(false)
 
     useEffect(() => {
         fetchPosts()
@@ -29,8 +30,12 @@ function App() {
     }
 
     async function fetchPosts() {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
-        setPosts(response.data)
+        setIsPostingLoading(true)
+        setTimeout(async () => {
+            const posts = await PostService.getAll()
+            setPosts(posts)
+            setIsPostingLoading(false)
+        }, 1000)
     }
 
   return (
@@ -52,11 +57,14 @@ function App() {
               filter={filter}
               setFilter={setFilter}
           />
-          <PostList
-              posts={sortedAndSearchedPosts}
-              title={'Список постов'}
-              remove={removePost}
-          />
+          {isPostingLoading
+              ? <div style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}><Loader/></div>
+              : <PostList
+                  posts={sortedAndSearchedPosts}
+                  title={'Список постов'}
+                  remove={removePost}
+              />
+          }
       </div>
   );
 }
