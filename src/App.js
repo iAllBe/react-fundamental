@@ -9,15 +9,22 @@ import {usePosts} from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/loader/Loader";
 import {useFetching} from "./hooks/useFetching";
+import {getPageCount} from "./utils/pages";
 
 function App() {
-    const [posts, setPosts] = useState([])
-    const [filter, setFilter] = useState({sort: '', query: ''})
-    const [modal, setModal] = useState(false)
-    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
-    const [fetchPosts, isPostLoading, postError] = useFetching(async () => {
-        const posts = await PostService.getAll()
-        setPosts(posts)
+    const [posts, setPosts] = useState([]);
+    const [filter, setFilter] = useState({sort: '', query: ''});
+    const [modal, setModal] = useState(false);
+    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+    const [totalPages, setTotalPages] = useState(0)
+    const [limit, setLimit] = useState(10)
+    const [page, setPage] = useState(1)
+
+    const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+        const response = await PostService.getAll(limit, page)
+        setPosts(response.data)
+        const totalCount = response.headers['x-total-count']
+        setTotalPages(getPageCount(totalCount, limit))
     })
 
     useEffect(() => {
@@ -53,7 +60,7 @@ function App() {
               setFilter={setFilter}
           />
           {postError && <h1>Произошла ошибка ${postError}</h1>}
-          {isPostLoading
+          {isPostsLoading
               ? <div style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}><Loader/></div>
               : <PostList
                   posts={sortedAndSearchedPosts}
