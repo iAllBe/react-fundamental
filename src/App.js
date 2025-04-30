@@ -9,7 +9,8 @@ import {usePosts} from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/loader/Loader";
 import {useFetching} from "./hooks/useFetching";
-import {getPageCount} from "./utils/pages";
+import {getPageCount, getPagesArray} from "./utils/pages";
+import Pagination from "./components/UI/pagination/Pagination";
 
 function App() {
     const [posts, setPosts] = useState([]);
@@ -29,7 +30,7 @@ function App() {
 
     useEffect(() => {
         fetchPosts()
-    }, []);
+    }, [page]);
 
     function createPost(newPost) {
         setPosts([...posts, newPost])
@@ -38,6 +39,10 @@ function App() {
 
     function removePost(post) {
         setPosts(posts.filter(p => p.id !== post.id))
+    }
+
+    const changePage = (page) => {
+        setPage(page)
     }
 
   return (
@@ -68,6 +73,11 @@ function App() {
                   remove={removePost}
               />
           }
+          <Pagination
+              page={page}
+              changePage={changePage}
+              totalPages={totalPages}
+          />
       </div>
   );
 }

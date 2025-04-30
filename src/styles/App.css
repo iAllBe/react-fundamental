@@ -25,3 +25,30 @@
 .remove-btn {
     margin-right: 0.5rem;
 }
+
+.page__wrapper {
+    margin-top: 30px;
+    display: flex;
+}
+
+.page {
+    padding: 10px;
+    border: 1px solid teal;
+    cursor: pointer;
+    transition: all 0.4s;
+}
+
+.page:hover {
+    background-color: teal;
+    color: white;
+}
+
+.page__current {
+    border: 2px solid orange;
+    font-weight: bold;
+}
+
+.page__current:hover {
+    background-color: orange;
+    color: black;
+}
