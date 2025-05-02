@@ -9,6 +9,10 @@ const AppRouter = () => {
     return (
         <Routes>
             <Route
+                path="/"
+                element={<Posts/>}
+            />
+            <Route
                 path="/about"
                 element={<About/>}
             />
