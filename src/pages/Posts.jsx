@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/App.css'
 import {usePosts} from "../hooks/usePosts";
 import {useFetching} from "../hooks/useFetching";
@@ -11,6 +11,7 @@ import PostList from "../components/PostList";
 import Pagination from "../components/UI/pagination/Pagination";
 import PostForm from "../components/PostForm";
 import Loader from "../components/UI/loader/Loader";
+import {useObserver} from "../hooks/useObserver";
 
 function Posts() {
     const [posts, setPosts] = useState([]);
@@ -20,12 +21,17 @@ function Posts() {
     const [totalPages, setTotalPages] = useState(0)
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
+    const lastListElement = useRef()
 
     const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
         const response = await PostService.getAll(limit, page)
-        setPosts(response.data)
+        setPosts([...posts, ...response.data])
         const totalCount = response.headers['x-total-count']
         setTotalPages(getPageCount(totalCount, limit))
+    })
+
+    useObserver(lastListElement, page < totalPages, isPostsLoading, () => {
+        setPage(page + 1);
     })
 
     useEffect(() => {
@@ -65,14 +71,18 @@ function Posts() {
                 setFilter={setFilter}
             />
             {postError && <h1>Произошла ошибка ${postError}</h1>}
-            {isPostsLoading
-                ? <div style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}><Loader/></div>
-                : <PostList
-                    posts={sortedAndSearchedPosts}
-                    title={'Список постов'}
-                    remove={removePost}
-                />
-            }
+            <PostList
+                posts={sortedAndSearchedPosts}
+                title={'Список постов'}
+                remove={removePost}
+            />
+            <div
+                ref={lastListElement}
+            ></div>
+            {isPostsLoading &&
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}><Loader/></div>}
+
+
             <Pagination
                 page={page}
                 changePage={changePage}
